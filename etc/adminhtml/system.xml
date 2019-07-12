@@ -27,7 +27,8 @@
             <label><![CDATA[Information]]></label>
             <tab>bss</tab>
             <resource>Bss_Core::config</resource>
-            <group id="modules" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0"
+            <frontend_model>Bss\Core\Block\Adminhtml\Header</frontend_model>
+            <group id="header" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0"
                    showInStore="0">
                 <label>Installed Modules</label>
                 <frontend_model>Bss\Core\Block\Adminhtml\Modules</frontend_model>

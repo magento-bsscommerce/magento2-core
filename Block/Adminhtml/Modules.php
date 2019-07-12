@@ -15,6 +15,7 @@
  * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
+
 namespace Bss\Core\Block\Adminhtml;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -37,6 +38,11 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
     private $bssHelper;
 
     /**
+     * @var \Bss\Core\Helper\Api
+     */
+    private $apiHelper;
+
+    /**
      * @var \Magento\Config\Block\System\Config\Form\Field
      */
     private $fieldRenderer;
@@ -47,12 +53,19 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
     private $dataObjectFactory;
 
     /**
+     * @var array
+     */
+    private $modules = [];
+
+    /**
+     * Modules constructor.
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Bss\Core\Helper\Data $bssHelper
+     * @param \Bss\Core\Helper\Api $apiHelper
      * @param \Magento\Framework\DataObjectFactory $dataObjectFactory
      * @param array $data
      */
@@ -63,14 +76,17 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Bss\Core\Helper\Data $bssHelper,
+        \Bss\Core\Helper\Api $apiHelper,
         \Magento\Framework\DataObjectFactory $dataObjectFactory,
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($context, $authSession, $jsHelper, $data);
-        $this->moduleList    = $moduleList;
+        $this->moduleList = $moduleList;
         $this->layoutFactory = $layoutFactory;
-        $this->bssHelper  = $bssHelper;
-        $this->dataObjectFactory  = $dataObjectFactory;
+        $this->bssHelper = $bssHelper;
+        $this->dataObjectFactory = $dataObjectFactory;
+        $this->apiHelper = $apiHelper;
     }
 
     /**
@@ -134,10 +150,11 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
             'module_name',
             \Bss\Core\Block\Adminhtml\Form\Element\Columns::class,
             [
-                'name'  => 'dummy',
+                'name' => 'dummy',
                 'label' => 'Module',
                 'current_ver' => 'Current Version',
-                'latest_ver' => 'Latest Version'
+                'latest_ver' => 'Latest Version',
+                'user_guide' => 'User Guide'
             ]
         )->setRenderer($this->getFieldRenderer());
 
@@ -153,52 +170,58 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
      */
     protected function getFieldHtml($fieldset, $moduleCode)
     {
-        $module = $this->bssHelper->getModuleInfo($moduleCode);
+        $localModule = $this->bssHelper->getModuleInfo($moduleCode);
 
-        if (!is_array($module)
-            || !array_key_exists('version', $module)
-            || !array_key_exists('description', $module)
+        if (!is_array($localModule)
+            || !array_key_exists('version', $localModule)
+            || !array_key_exists('description', $localModule)
         ) {
             return '';
         }
 
         $suite = null;
-        if (isset($module['extra']['suite'])) {
-            $suite = $module['extra']['suite'];
+        if (isset($localModule['extra']['suite'])) {
+            $suite = $localModule['extra']['suite'];
         }
 
         if ($this->bssHelper->isModuleEnable('Bss_Breadcrumbs') && $suite == 'seo-suite') {
             return '';
         }
 
-        $moduleName = $module['description'];
-        $apiName = $module['name'];
+        $moduleName = $localModule['description'];
+        $apiName = $localModule['name'];
 
         $moduleName = str_replace('Bss', '', $moduleName);
         $moduleName = str_replace('Modules', '', $moduleName);
         $moduleName = str_replace('Module', '', $moduleName);
         $moduleName = trim($moduleName);
 
-        $modules = $this->bssHelper->getRemoteModulesInfo();
+        $modules = $this->apiHelper->getModules();
+        $this->modules = $modules['data']['modules']['items'];
 
         $latestVer = 'unknown';
         $moduleUrl = '#';
-        if (isset($modules[$apiName])) {
-            $latestVer = $this->getLatestVersion($modules[$apiName]);
-            $moduleUrl = $this->getModuleUrl($modules[$apiName]);
+        $userGuide = '';
+        $module = $this->searchByModule($apiName);
+        if (!empty($module)) {
+            $latestVer = $this->getLatestVersion($module);
+            $moduleUrl = $this->getModuleUrl($module);
+            $userGuide = $module['packages'][0]['user_guide'];
+            $userGuide = "<a href = '$userGuide' target='_blank'>Link</a>";
         }
 
         $latestVerCol = $latestVer == 'unknown' ? $latestVer : "<a href = '$moduleUrl' target='_blank'>$latestVer</a>";
 
-        $moduleVer = isset($module['extra']['suite-version']) ? $module['extra']['suite-version'] : $module['version'];
+        $moduleVer = isset($localModule['extra']['suite-version']) ? $localModule['extra']['suite-version'] : $localModule['version'];
         $field = $fieldset->addField(
             $moduleCode,
             \Bss\Core\Block\Adminhtml\Form\Element\Columns::class,
             [
-                'name'  => 'dummy',
+                'name' => 'dummy',
                 'label' => $moduleName,
                 'current_ver' => $moduleVer,
-                'latest_ver' => $latestVerCol
+                'latest_ver' => $latestVerCol,
+                'user_guide' => $userGuide
             ]
         )->setRenderer($this->getFieldRenderer());
 
@@ -253,46 +276,48 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Get bsscommerce.com module url.
      *
-     * @param array $modulesInfo
+     * @param array $modules
      * @return string
      */
-    protected function getModuleUrl($modulesInfo)
+    protected function getModuleUrl($modules)
     {
-        if (!isset($modulesInfo[0])) {
+        $packages = $modules['packages'];
+        if (!isset($packages[0])) {
             return '#';
         }
 
-        $moduleInfo = $modulesInfo[0];
-        return isset($moduleInfo['product_url']) ? $moduleInfo['product_url'] : '#';
+        $packages = $packages[0];
+        return isset($packages['product_url']) ? $packages['product_url'] : '#';
     }
 
     /**
      * Get module latest version from bsscommerce.com.
      *
-     * @param array $modulesInfo
+     * @param array $module
      * @return string
      */
-    protected function getLatestVersion($modulesInfo)
+    protected function getLatestVersion($module)
     {
-        if (count($modulesInfo) == 1) {
-            $moduleInfo = $modulesInfo[0];
+        $packages = $module['packages'];
+        if (count($packages) == 1) {
+            $moduleInfo = $packages[0];
             $linkTitle = explode(" ", $moduleInfo['title']);
             $latestVer = ltrim($this->getLinkVersion($linkTitle), 'v');
             return $latestVer;
         }
 
-        $latestVer = $this->getLatestByExactVersionEdition($modulesInfo);
+        $latestVer = $this->getLatestByExactVersionEdition($packages);
 
         if (empty($latestVer)) {
-            $latestVer = $this->getLatestByExactEdition($modulesInfo);
+            $latestVer = $this->getLatestByExactEdition($packages);
         }
 
         if (empty($latestVer)) {
-            $latestVer = $this->getLatestByExactVersion($modulesInfo);
+            $latestVer = $this->getLatestByExactVersion($packages);
         }
 
         if (empty($latestVer)) {
-            $latestVer = $this->getLatestByRelativeVersion($modulesInfo);
+            $latestVer = $this->getLatestByRelativeVersion($packages);
         }
 
         if (empty($latestVer)) {
@@ -407,5 +432,18 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         $index = (count($linkTitle) - 1);
         return $linkTitle[$index];
+    }
+
+    /**
+     * @param string $apiName
+     * @return array
+     */
+    protected function searchByModule($apiName)
+    {
+        $indexOfModule = array_search($apiName, array_column($this->modules, 'name'));
+        if ($indexOfModule !== false) {
+            return $this->modules[$indexOfModule];
+        }
+        return [];
     }
 }
