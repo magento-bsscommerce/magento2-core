@@ -15,6 +15,7 @@
  * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
+
 namespace Bss\Core\Block\Adminhtml\Form\Element;
 
 class Columns extends \Magento\Framework\Data\Form\Element\AbstractElement
@@ -68,8 +69,9 @@ class Columns extends \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getElementHtml()
     {
-        $columns = $this->getVersionHtml($this->getData('current_ver'), 'current-version');
-        $columns .= $this->getVersionHtml($this->getData('latest_ver'), 'latest-version');
+        $columns = $this->getVersionHtml($this->getData('current_ver'));
+        $columns .= $this->getVersionHtml($this->getData('latest_ver'));
+        $columns .= $this->getVersionHtml($this->getData('user_guide'));
 
         $html = $this->getBeforeElementHtml() . $columns . $this->getAfterElementHtml();
         return $html;
@@ -82,12 +84,11 @@ class Columns extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param string $type
      * @return string
      */
-    protected function getVersionHtml($value, $type = 'current-version')
+    protected function getVersionHtml($value)
     {
-        $width = $type == 'current-version' ? '20%' : '45%';
-        $childWidth = $type == 'current-version' ? '' : 'width: 45%';
-        $html = '<td class="bss-value ' . $type . '" style="width: ' . $width . '; padding: 2.2rem 1.5rem 0 0;">';
-        $html .= "<div class='bss-version' style='text-align: center; " . $childWidth . "'>$value</div>";
+        $width = '20%';
+        $html = '<td class="bss-value ' . '" style="width: ' . $width . '; padding: 2.2rem 1.5rem 0 0;">';
+        $html .= "<div class='bss-version' style='text-align: center; " . "'>$value</div>";
         $html .= '</td>';
 
         return $html;

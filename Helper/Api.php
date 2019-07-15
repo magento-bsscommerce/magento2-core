@@ -55,11 +55,11 @@ class Api extends AbstractHelper
                      items{
                         name
                         packages {
-                          entity_id
-                          product_url
-                          api_name
-                          title
-                          user_guide
+                            entity_id
+                            product_url
+                            api_name
+                            title
+                            user_guide
                         }
                      }
                     count

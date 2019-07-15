@@ -36,6 +36,13 @@
             <group id="debug" translate="label" sortOrder="30" showInDefault="1">
                 <label>Root Folder</label>
                 <frontend_model>Bss\Core\Block\Adminhtml\RootFolder</frontend_model>
+                <field id="enable_popup" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable BSS Commerce Popup</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[Turn on Bss Commerce Module's new version and Promotion notifications]]>
+                    </comment>
+                </field>
             </group>
         </section>
     </system>

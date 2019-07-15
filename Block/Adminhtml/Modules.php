@@ -167,6 +167,7 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param AbstractElement $fieldset
      * @param string $moduleCode
      * @return string
+     * @throws \ErrorException
      */
     protected function getFieldHtml($fieldset, $moduleCode)
     {
@@ -203,9 +204,13 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
         $moduleUrl = '#';
         $userGuide = '';
         $module = $this->searchByModule($apiName);
+        print_r('<pre>');
+        print_r($latestVer);
         if (!empty($module)) {
             $latestVer = $this->getLatestVersion($module);
             $moduleUrl = $this->getModuleUrl($module);
+            print_r('<pre>');
+            print_r($module['packages']);
             $userGuide = $module['packages'][0]['user_guide'];
             $userGuide = "<a href = '$userGuide' target='_blank'>Link</a>";
         }
