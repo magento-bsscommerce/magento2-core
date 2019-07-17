@@ -26,22 +26,23 @@ class Header extends \Magento\Config\Block\System\Config\Form
      */
     protected function _afterToHtml($html)
     {
-        $additional =
+        $headerHtml =
             '
             <div id="bss-core-header">
-                <a class="logo" href="https://bsscommerce.com/" title="BSS Commerce">
-                    <img src="https://bsscommerce.com/pub/static/version1562819228/frontend/Bss/bsscommerce/en_US/images/logo.png" title="" alt="" width="95" height="54">
+                <a target="_blank" class="logo" href="https://bsscommerce.com/" title="BSS Commerce">
+                    <img src="https://bsscommerce.com/pub/static/version1562819228/frontend/Bss/bsscommerce/en_US/images/logo.png" 
+                    title="BSS Commerce" alt="" width="95" height="54">
                 </a>
-                <a class="logo" href="https://partners.magento.com/portal/details/partner/id/1742/" target="_blank" rel="nofollow noopener">
+                <a class="logo" href="https://partners.magento.com/portal/details/partner/id/1742/" target="_blank">
                     <img src="https://bsscommerce.com/pub/media/wysiwyg/logo_builder_1.png" alt="">
                 </a>
                 <div class="menu-top">
                     <ul>
-                        <li><a href="https://bsscommerce.com/magento-extensions.html">Magento 1 Extensions</a></li>
-                        <li><a href="https://bsscommerce.com/magento-2-extensions.html">Magento 2 Extensions</a></li>
+                        <li><a target="_blank" href="https://bsscommerce.com/magento-extensions.html">Magento 1 Extensions</a></li>
+                        <li><a target="_blank" href="https://bsscommerce.com/magento-2-extensions.html">Magento 2 Extensions</a></li>
                     </ul>
                 </div>
             </div>';
-        return $additional . $html;
+        return $headerHtml . $html;
     }
 }

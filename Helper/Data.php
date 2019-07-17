@@ -15,16 +15,13 @@
  * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
+
 namespace Bss\Core\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 
 class Data extends AbstractHelper
 {
-    const BSS_WSDL_END_POINT = 'http://bsscommerce.com/api/soap/?wsdl=1';
-    const BSS_MODULES_INFO_API_USERNAME = 'core_api_username';
-    const BSS_MODULES_INFO_API_PASSWORD = 'MwNq9@LAhmWe3mz.';
-
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
      */
@@ -46,11 +43,6 @@ class Data extends AbstractHelper
     private $json;
 
     /**
-     * @var array
-     */
-    private $modulesInfo;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -65,7 +57,8 @@ class Data extends AbstractHelper
         \Magento\Framework\Module\Dir\Reader $moduleReader,
         \Magento\Framework\Filesystem\Driver\File $filesystem,
         \Magento\Framework\Serialize\Serializer\Json $json
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->productMetadata = $productMetadata;
         $this->moduleReader = $moduleReader;
@@ -82,6 +75,30 @@ class Data extends AbstractHelper
     public function getStoreConfig($path)
     {
         return $this->scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEnablePopup()
+    {
+        return $this->getStoreConfig('bss_core/setting/enable_popup');
+    }
+
+    /**
+     * @return String
+     */
+    public function getCustomCss()
+    {
+        return $this->getStoreConfig('bss_core/setting/additional_css');
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEnablePreprocessedCss()
+    {
+        return $this->getStoreConfig('bss_core/setting/enable_preprocessed_css');
     }
 
     /**
@@ -123,48 +140,6 @@ class Data extends AbstractHelper
     public function getMagentoEdition()
     {
         return $this->productMetadata->getEdition();
-    }
-
-    /**
-     * Get installed module info by composer.json.
-     *
-     * @param string $moduleCode
-     * @return array|bool|float|int|mixed|string|null
-     */
-    public function getModuleInfo($moduleCode)
-    {
-        try {
-            $dir = $this->moduleReader->getModuleDir('', $moduleCode);
-            $file = $dir . '/composer.json';
-
-            $string = $this->filesystem->fileGetContents($file);
-            $json = $this->json->unserialize($string);
-
-            return $json;
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-
-    /**
-     * Get bsscommerce.com modules information.
-     *
-     * @return array
-     */
-    public function getRemoteModulesInfo()
-    {
-        try {
-            if (!$this->modulesInfo) {
-                $client = new \SoapClient(self::BSS_WSDL_END_POINT);
-                $sessionId = $client->login(self::BSS_MODULES_INFO_API_USERNAME, self::BSS_MODULES_INFO_API_PASSWORD);
-                $resultList = $client->call($sessionId, 'soapapi_product.list', [[]]);
-                $this->modulesInfo = $resultList;
-            }
-
-            return $this->modulesInfo;
-        } catch (\Exception $e) {
-            return [];
-        }
     }
 
     /**

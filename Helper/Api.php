@@ -22,7 +22,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 class Api extends AbstractHelper
 {
-    const GRAPHQL_ENDPOINT = 'http://127.0.0.1/bsscommercer2019/graphql';
+    const GRAPHQL_ENDPOINT = 'http://104.237.149.38/bsscommerce/graphql';
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
@@ -45,52 +45,62 @@ class Api extends AbstractHelper
 
     /**
      * @return array
-     * @throws \ErrorException
      */
     public function getModules()
     {
-        $query =
-            'query {
-                 modules {
-                     items{
-                        name
-                        packages {
-                            entity_id
-                            product_url
-                            api_name
-                            title
-                            user_guide
-                        }
+        try {
+            $query =
+                'query {
+                     modules {
+                         items{
+                            name
+                            packages {
+                                entity_id
+                                product_url
+                                api_name
+                                title
+                                user_guide
+                            }
+                         }
+                        count
                      }
-                    count
-                 }
 	        }';
-        return $this->graphQlQuery($query);
+            return $this->graphQlQuery($query)['data']['modules']['items'];
+        } catch (\ErrorException $exception) {
+            return [];
+        } catch (\Exception $exception) {
+            return [];
+        }
     }
 
     /**
      * @return array
-     * @throws \ErrorException
      */
     public function getConfigs()
     {
-        $query = '
+        try {
+            $query = '
         query {
             configs {
                 popup_expire_time
                 popup_delay_open_time
             }
 	    }';
-        return $this->graphQlQuery($query);
+            return $this->graphQlQuery($query)['data']['configs'];
+        } catch (\ErrorException $exception) {
+            return [];
+        } catch (\Exception $exception) {
+            return [];
+        }
     }
 
     /**
      * @return array
-     * @throws \ErrorException
      */
     public function getNewProducts()
     {
-        $query = '
+        try {
+            $query = '
         query {
             new_products {
                 name
@@ -99,18 +109,23 @@ class Api extends AbstractHelper
                 link
             }
 	    }';
-        return $this->graphQlQuery($query);
+            return $this->graphQlQuery($query)['data']['new_products'];
+        } catch (\ErrorException $exception) {
+            return [];
+        } catch (\Exception $exception) {
+            return [];
+        }
     }
 
     /**
      * @param $productIds
      * @return array
-     * @throws \ErrorException
      */
     public function getRelatedProducts($productIds)
     {
-        $productIds = implode(",", $productIds);
-        $query = "
+        try {
+            $productIds = implode(",", $productIds);
+            $query = "
         query {
             related_products (product_ids: [$productIds]) {
                 main_product
@@ -122,7 +137,12 @@ class Api extends AbstractHelper
                 }
             }
 	    }";
-        return $this->graphQlQuery($query);
+            return $this->graphQlQuery($query)['data']['related_products'];
+        } catch (\ErrorException $exception) {
+            return [];
+        } catch (\Exception $exception) {
+            return [];
+        }
     }
 
     /**
@@ -134,11 +154,16 @@ class Api extends AbstractHelper
      */
     protected function graphQlQuery(string $query, array $variables = [], ?string $token = null): array
     {
+        $endpoint = self::GRAPHQL_ENDPOINT;
+        if ($debugEndpoint = $this->_request->getParam('gql_endpoint')) {
+            $endpoint = $debugEndpoint;
+        }
+
         $headers = ['Content-Type: application/json'];
         if (null !== $token) {
             $headers[] = "Authorization: bearer $token";
         }
-        if (false === $data = @file_get_contents(self::GRAPHQL_ENDPOINT, false, stream_context_create([
+        if (false === $data = @file_get_contents($endpoint, false, stream_context_create([
                 'http' => [
                     'method' => 'POST',
                     'header' => $headers,

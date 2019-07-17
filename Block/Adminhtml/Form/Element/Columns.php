@@ -81,7 +81,6 @@ class Columns extends \Magento\Framework\Data\Form\Element\AbstractElement
      * Get the html for module versions.
      *
      * @param string $value
-     * @param string $type
      * @return string
      */
     protected function getVersionHtml($value)
