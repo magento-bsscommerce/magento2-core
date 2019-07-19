@@ -86,6 +86,7 @@ class PreprocessedCss extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
+     * @codingStandardsIgnoreStart
      */
     public function getLocalBssModuleCssFiles()
     {
@@ -121,6 +122,7 @@ class PreprocessedCss extends \Magento\Framework\View\Element\Template
 
         return $result;
     }
+    //@codingStandardsIgnoreEnd
 
     /**
      * @return String

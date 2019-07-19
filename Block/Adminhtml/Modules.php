@@ -20,6 +20,10 @@ namespace Bss\Core\Block\Adminhtml;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class Modules
+ * @package Bss\Core\Block\Adminhtml
+ */
 class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
@@ -47,12 +51,9 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\View\Helper\Js $jsHelper
-     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Bss\Core\Helper\Data $bssHelper
-     * @param \Bss\Core\Helper\Api $apiHelper
      * @param \Bss\Core\Helper\Module $moduleHelper
-     * @param \Magento\Framework\DataObjectFactory $dataObjectFactory
      * @param array $data
      */
     public function __construct(
@@ -138,16 +139,12 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
      * @param AbstractElement $fieldset
      * @param string $moduleCode
      * @return string
-     * @throws \ErrorException
      */
     protected function getFieldHtml($fieldset, $moduleCode)
     {
         $localModule = $this->moduleHelper->getLocalModuleInfo($moduleCode);
 
-        if (!is_array($localModule)
-            || !array_key_exists('version', $localModule)
-            || !array_key_exists('description', $localModule)
-        ) {
+        if (empty($localModule)) {
             return '';
         }
 

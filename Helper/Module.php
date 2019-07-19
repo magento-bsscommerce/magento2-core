@@ -156,7 +156,7 @@ class Module
 
         if ($onlyVersionNumber) {
             foreach ($latestVer as $key => $version) {
-                preg_match("(?:v)((?:[0-9]+\.?)+)", $version, $matches);
+                preg_match("/(?:v)((?:[0-9]+\.?)+)/i", $version, $matches);
                 $latestVer[$key] = $matches[1];
             }
         }
@@ -279,7 +279,6 @@ class Module
         $modules = $this->getModules();
         $indexOfModule = array_search($apiName, array_column($modules, 'name'));
         if ($indexOfModule !== false) {
-            die('bb');
             return $modules[$indexOfModule];
         }
         return [];
@@ -322,9 +321,16 @@ class Module
             $file = $dir . '/composer.json';
 
             $string = $this->filesystem->fileGetContents($file);
-            $json = $this->json->unserialize($string);
+            $result = $this->json->unserialize($string);
 
-            return $json;
+            if (!is_array($result)
+                || !array_key_exists('version', $result)
+                || !array_key_exists('description', $result)
+            ) {
+                return '';
+            }
+
+            return $result;
         } catch (\Exception $e) {
             return [];
         }
@@ -338,24 +344,28 @@ class Module
         $localModules = $this->getLocalBssModules();
         $result = [];
         foreach ($localModules as $moduleName) {
-            $module = $this->searchByModule($moduleName);
             $localModule = $this->getLocalModuleInfo($moduleName);
+            if (!empty($localModule) && isset($localModule['name'])) {
+                $remoteModule = $this->searchByModule($localModule['name']);
 
-            if (!empty($module) && !empty($localModule)) {
-                $localModuleVersion = isset($localModule['extra']['suite-version']) ?
-                    $localModule['extra']['suite-version'] : $localModule['version'];
-                $latestVer = $this->getLatestVersion($module, true);
-                $moduleLink = $this->getModuleUrl($module);
-                $moduleLink .= $moduleLink == '#' ? '' : '#release-note';
-                if (version_compare($latestVer, $localModuleVersion) > 0) {
-                    $result[] = [
-                        'current_version' => $localModuleVersion,
-                        'latest_version' => $latestVer,
-                        'release_note' => $moduleLink
-                    ];
+                if (!empty($remoteModule)) {
+                    $localModuleVersion = isset($localModule['extra']['suite-version']) ?
+                        $localModule['extra']['suite-version'] : $localModule['version'];
+                    $latestVer = $this->getLatestVersion($remoteModule, true);
+                    $moduleLink = $this->getModuleUrl($remoteModule);
+                    $moduleLink .= $moduleLink == '#' ? '' : '#release-note';
+                    if (version_compare($latestVer, $localModuleVersion) > 0) {
+                        $result[] = [
+                            'name' => $remoteModule['product_name'],
+                            'current_version' => $localModuleVersion,
+                            'latest_version' => $latestVer,
+                            'release_note' => $moduleLink
+                        ];
+                    }
                 }
             }
         }
+
         return $result;
     }
 }

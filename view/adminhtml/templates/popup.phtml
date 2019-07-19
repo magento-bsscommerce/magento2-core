@@ -20,7 +20,44 @@
 ?>
 <?php
 /**
- * @var $block \Bss\Core\Block\Adminhtml\Header
+ * @var $block \Bss\Core\Block\Adminhtml\Popup
  */
 $newVersions = $block->getModuleHasNewVersion();
+$popupConfigs = $block->getPopupConfig();
+$popupExpireTime = isset($popupConfigs['popup_expire_time']) ? (int)$popupConfigs['popup_expire_time'] : 1;
+$popupDelayOpenTime = isset($popupConfigs['popup_delay_open_time']) ? (int)$popupConfigs['popup_delay_open_time'] : 500;
 ?>
+
+<?php if ($newVersions): ?>
+    <div id="bss-popup-new-version" class="popup-content">
+        <a target="_blank" class="logo" href="https://bsscommerce.com/" title="BSS Commerce">
+            <img src="<?= $block->escapeHtmlAttr($block->getLogo()) ?>"
+                 title="BSS Commerce">
+        </a>
+
+        <div class="messages">
+            <?php foreach ($newVersions as $newVersion): ?>
+                <ul>
+                    <li>
+                        <p><?= __('%1 delivers a latest version updates %2. Please update as soon as possible to enhance performance and functionality.',
+                                $newVersion['name'], $newVersion['latest_version']) ?>
+                        </p>
+                        <a href="<?= $block->escapeHtmlAttr($newVersion['release_note']) ?>"><?= __('More details') ?></a>
+                    </li>
+                </ul>
+
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "#bss-popup-new-version": {
+            "Bss_Core/js/popup": {
+                "expire": <?= $popupExpireTime ?>,
+                "delay": <?= $popupExpireTime ?>,
+                "title": "<?= __('Incoming Message') ?>"
+            }
+        }
+    }
+    </script>
+<?php endif; ?>

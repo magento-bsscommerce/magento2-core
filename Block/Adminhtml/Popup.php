@@ -42,11 +42,17 @@ class Popup extends Template
     private $apiHelper;
 
     /**
+     * @var Header
+     */
+    private $headerBlock;
+
+    /**
      * Popup constructor.
      * @param Template\Context $context
      * @param \Bss\Core\Helper\Data $bssHelper
      * @param \Bss\Core\Helper\Module $moduleHelper
      * @param \Bss\Core\Helper\Api $apiHelper
+     * @param Header $headerBlock
      * @param array $data
      */
     public function __construct(
@@ -54,6 +60,7 @@ class Popup extends Template
         \Bss\Core\Helper\Data $bssHelper,
         \Bss\Core\Helper\Module $moduleHelper,
         \Bss\Core\Helper\Api $apiHelper,
+        Header $headerBlock,
         array $data = []
     )
     {
@@ -61,6 +68,7 @@ class Popup extends Template
         $this->moduleHelper = $moduleHelper;
         $this->bssHelper = $bssHelper;
         $this->apiHelper = $apiHelper;
+        $this->headerBlock = $headerBlock;
     }
 
     /**
@@ -80,5 +88,13 @@ class Popup extends Template
     public function getPopupConfig()
     {
         return $this->apiHelper->getConfigs();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->headerBlock->getBssCommerceLogo();
     }
 }

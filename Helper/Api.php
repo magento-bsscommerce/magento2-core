@@ -22,7 +22,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 class Api extends AbstractHelper
 {
-    const GRAPHQL_ENDPOINT = 'http://104.237.149.38/bsscommerce/graphql';
+    const GRAPHQL_ENDPOINT = 'http://127.0.0.1/bsscommercer2019/graphql';
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
@@ -54,6 +54,7 @@ class Api extends AbstractHelper
                      modules {
                          items{
                             name
+                            product_name
                             packages {
                                 entity_id
                                 product_url
@@ -66,9 +67,8 @@ class Api extends AbstractHelper
                      }
 	        }';
             return $this->graphQlQuery($query)['data']['modules']['items'];
-        } catch (\ErrorException $exception) {
-            return [];
         } catch (\Exception $exception) {
+            $this->_logger->critical($exception->getMessage());
             return [];
         }
     }
@@ -87,9 +87,8 @@ class Api extends AbstractHelper
             }
 	    }';
             return $this->graphQlQuery($query)['data']['configs'];
-        } catch (\ErrorException $exception) {
-            return [];
         } catch (\Exception $exception) {
+            $this->_logger->critical($exception->getMessage());
             return [];
         }
     }
@@ -110,9 +109,8 @@ class Api extends AbstractHelper
             }
 	    }';
             return $this->graphQlQuery($query)['data']['new_products'];
-        } catch (\ErrorException $exception) {
-            return [];
         } catch (\Exception $exception) {
+            $this->_logger->critical($exception->getMessage());
             return [];
         }
     }
@@ -120,6 +118,7 @@ class Api extends AbstractHelper
     /**
      * @param $productIds
      * @return array
+     * @throws \Exception
      */
     public function getRelatedProducts($productIds)
     {
@@ -138,8 +137,6 @@ class Api extends AbstractHelper
             }
 	    }";
             return $this->graphQlQuery($query)['data']['related_products'];
-        } catch (\ErrorException $exception) {
-            return [];
         } catch (\Exception $exception) {
             return [];
         }
@@ -150,7 +147,6 @@ class Api extends AbstractHelper
      * @param array $variables
      * @param null|string $token
      * @return array
-     * @throws \ErrorException
      */
     protected function graphQlQuery(string $query, array $variables = [], ?string $token = null): array
     {
@@ -163,17 +159,26 @@ class Api extends AbstractHelper
         if (null !== $token) {
             $headers[] = "Authorization: bearer $token";
         }
-        if (false === $data = @file_get_contents($endpoint, false, stream_context_create([
-                'http' => [
-                    'method' => 'POST',
-                    'header' => $headers,
-                    'content' => $this->json->serialize(['query' => $query, 'variables' => $variables]),
-                ]
-            ]))) {
-            $error = error_get_last();
-            throw new \ErrorException($error['message'], $error['type']);
-        }
 
-        return $this->json->unserialize($data);
+        try {
+            if (false === $data = file_get_contents($endpoint, false, stream_context_create([
+                    'http' => [
+                        'method' => 'POST',
+                        'header' => $headers,
+                        'content' => $this->json->serialize(['query' => $query, 'variables' => $variables]),
+                    ]
+                ]))) {
+                $error = error_get_last();
+                throw new \ErrorException($error['message'], $error['type']);
+            }
+
+            return $this->json->unserialize($data);
+        } catch (\ErrorException $exception) {
+            $this->_logger->critical($exception->getMessage());
+            return [];
+        } catch (\Exception $exception) {
+            $this->_logger->critical($exception->getMessage());
+            return [];
+        }
     }
 }
