@@ -97,4 +97,12 @@ class Popup extends Template
     {
         return $this->headerBlock->getBssCommerceLogo();
     }
+
+    /**
+     * @return string
+     */
+    public function getPartnerLogo()
+    {
+        return $this->headerBlock->getPartnerLogo();
+    }
 }

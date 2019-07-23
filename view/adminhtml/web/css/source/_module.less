@@ -58,16 +58,43 @@
   }
 }
 
-#bss-popup-new-version {
-  display: none;
-  width: 100%;
-  .logo {
-    width: 20%;
-    float: left;
-    text-align: center;
+.bss-popup {
+  .modal-inner-wrap {
+    width: 50%;
   }
-  .messages {
-    width: 80%;
-    float: right;
+  .modal-title {
+    margin-left: 18%;
+  }
+  .modal-content {
+    padding: 0;
+  }
+  #bss-popup-new-version {
+    width: 100%;
+    .logo {
+      width: 20%;
+      float: left;
+      text-align: center;
+      div {
+        margin-bottom: 25px;
+      }
+    }
+    .messages {
+      width: 80%;
+      float: right;
+      li {
+        margin-bottom: 10px;
+        a {
+          color: #eb5202;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  .modal-footer button {
+    text-transform: uppercase;
+    background-color: #eb5202;
+    border-color: #eb5202;
+    color: #ffffff;
+    text-decoration: none;
   }
 }

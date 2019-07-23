@@ -37,7 +37,7 @@ define([
                     type: 'popup',
                     innerScroll: true,
                     title: $.mage.__(this.options.title),
-                    modalClass: "modal-custom",
+                    modalClass: "bss-popup",
                     autoOpen: true,
                     responsive: true,
                     clickableOverlay: false,

@@ -30,11 +30,11 @@ class Header extends \Magento\Config\Block\System\Config\Form
             '
             <div id="bss-core-header">
                 <a target="_blank" class="logo" href="https://bsscommerce.com/" title="BSS Commerce">
-                    <img src="'.$this->getBssCommerceLogo().'" 
+                    <img src="' . $this->getBssCommerceLogo() . '" 
                     title="BSS Commerce">
                 </a>
-                <a class="logo" href="https://partners.magento.com/portal/details/partner/id/1742/" target="_blank">
-                    <img src="https://bsscommerce.com/pub/media/wysiwyg/logo_builder_1.png" alt="">
+                <a target="_blank" class="logo" href="https://partners.magento.com/portal/details/partner/id/1742/">
+                    <img src="' . $this->getPartnerLogo() . '" alt="">
                 </a>
                 <div class="menu-top">
                     <ul>
@@ -49,7 +49,16 @@ class Header extends \Magento\Config\Block\System\Config\Form
     /**
      * @return string
      */
-    public function getBssCommerceLogo() {
+    public function getBssCommerceLogo()
+    {
         return 'https://bsscommerce.com/pub/static/frontend/Bss/bsscommerce/en_US/images/logo.png';
+    }
+
+    /**
+     * @return string
+     */
+    public function getPartnerLogo()
+    {
+        return 'https://bsscommerce.com/pub/media/wysiwyg/logo_builder_1.png';
     }
 }
