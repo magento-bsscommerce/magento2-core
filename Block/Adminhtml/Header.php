@@ -18,47 +18,63 @@
 
 namespace Bss\Core\Block\Adminhtml;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+
+/**
+ * Class Header
+ * @package Bss\Core\Block\Adminhtml
+ */
 class Header extends \Magento\Config\Block\System\Config\Form
 {
+    /**
+     * @var \Bss\Core\Helper\Api
+     */
+    private $apiHelper;
+
+    /**
+     * Header constructor.
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Config\Model\Config\Factory $configFactory
+     * @param \Magento\Config\Model\Config\Structure $configStructure
+     * @param \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory
+     * @param \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory
+     * @param \Bss\Core\Helper\Api $apiHelper
+     * @param array $data
+     * @param SettingChecker|null $settingChecker
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Config\Model\Config\Factory $configFactory,
+        \Magento\Config\Model\Config\Structure $configStructure,
+        \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
+        \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory,
+        \Bss\Core\Helper\Api $apiHelper,
+        array $data = [],
+        SettingChecker $settingChecker = null
+    )
+    {
+
+        parent::__construct($context, $registry, $formFactory, $configFactory, $configStructure, $fieldsetFactory,
+            $fieldFactory, $data, $settingChecker);
+        $this->apiHelper = $apiHelper;
+    }
+
     /**
      * @param string $html
      * @return string
      */
     protected function _afterToHtml($html)
     {
-        $headerHtml =
-            '
-            <div id="bss-core-header">
-                <a target="_blank" class="logo" href="https://bsscommerce.com/" title="BSS Commerce">
-                    <img src="' . $this->getBssCommerceLogo() . '" 
-                    title="BSS Commerce">
-                </a>
-                <a target="_blank" class="logo" href="https://partners.magento.com/portal/details/partner/id/1742/">
-                    <img src="' . $this->getPartnerLogo() . '" alt="">
-                </a>
-                <div class="menu-top">
-                    <ul>
-                        <li><a target="_blank" href="https://bsscommerce.com/magento-extensions.html">Magento 1 Extensions</a></li>
-                        <li><a target="_blank" href="https://bsscommerce.com/magento-2-extensions.html">Magento 2 Extensions</a></li>
-                    </ul>
-                </div>
-            </div>';
-        return $headerHtml . $html;
-    }
+        $config = $this->apiHelper->getConfigs();
+        if (!empty($config)) {
+            $blockHeaderHtml = $config['theme_header_block'];
+            return $blockHeaderHtml . $html;
+        }
 
-    /**
-     * @return string
-     */
-    public function getBssCommerceLogo()
-    {
-        return 'https://bsscommerce.com/pub/static/frontend/Bss/bsscommerce/en_US/images/logo.png';
-    }
-
-    /**
-     * @return string
-     */
-    public function getPartnerLogo()
-    {
-        return 'https://bsscommerce.com/pub/media/wysiwyg/logo_builder_1.png';
+        return $html;
     }
 }

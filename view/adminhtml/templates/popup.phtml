@@ -26,23 +26,12 @@ $newVersions = $block->getModuleHasNewVersion();
 $popupConfigs = $block->getPopupConfig();
 $popupExpireTime = isset($popupConfigs['popup_expire_time']) ? (int)$popupConfigs['popup_expire_time'] : 1;
 $popupDelayOpenTime = isset($popupConfigs['popup_delay_open_time']) ? (int)$popupConfigs['popup_delay_open_time'] : 500;
+$popupBlockHtml = isset($popupConfigs['theme_popup_block']) ? $popupConfigs['theme_popup_block'] : '';
 ?>
 
 <?php if ($newVersions): ?>
     <div id="bss-popup-new-version" class="popup-content" style="display: none">
-        <div class="logo">
-            <div>
-                <a target="_blank" href="https://bsscommerce.com/" title="BSS Commerce">
-                    <img src="<?= $block->escapeHtmlAttr($block->getLogo()) ?>"
-                         title="BSS Commerce">
-                </a>
-            </div>
-            <div>
-                <a target="_blank" href="https://partners.magento.com/portal/details/partner/id/1742/">
-                    <img src="<?= $block->escapeHtmlAttr($block->getPartnerLogo()) ?>" alt="">
-                </a>
-            </div>
-        </div>
+        <?= $popupBlockHtml ?>
 
         <div class="messages">
             <ul>
@@ -63,7 +52,7 @@ $popupDelayOpenTime = isset($popupConfigs['popup_delay_open_time']) ? (int)$popu
         "#bss-popup-new-version": {
             "Bss_Core/js/popup": {
                 "expire": <?= $popupExpireTime ?>,
-                "delay": <?= $popupExpireTime ?>,
+                "delay": <?= $popupDelayOpenTime ?>,
                 "title": "<?= __('Incoming Message') ?>"
             }
         }

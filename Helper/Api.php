@@ -84,6 +84,8 @@ class Api extends AbstractHelper
             configs {
                 popup_expire_time
                 popup_delay_open_time
+                theme_header_block
+                theme_popup_block
             }
 	    }';
             return $this->graphQlQuery($query)['data']['configs'];
