@@ -18,8 +18,6 @@
 
 namespace Bss\Core\Block\Adminhtml;
 
-use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
-
 /**
  * Class Header
  * @package Bss\Core\Block\Adminhtml
@@ -42,7 +40,6 @@ class Header extends \Magento\Config\Block\System\Config\Form
      * @param \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory
      * @param \Bss\Core\Helper\Api $apiHelper
      * @param array $data
-     * @param SettingChecker|null $settingChecker
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,13 +50,12 @@ class Header extends \Magento\Config\Block\System\Config\Form
         \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
         \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory,
         \Bss\Core\Helper\Api $apiHelper,
-        array $data = [],
-        SettingChecker $settingChecker = null
+        array $data = []
     )
     {
 
         parent::__construct($context, $registry, $formFactory, $configFactory, $configStructure, $fieldsetFactory,
-            $fieldFactory, $data, $settingChecker);
+            $fieldFactory, $data);
         $this->apiHelper = $apiHelper;
     }
 
