@@ -160,17 +160,13 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
         $moduleName = $localModule['description'];
         $apiName = $localModule['name'];
 
-        $moduleName = str_replace('Bss', '', $moduleName);
-        $moduleName = str_replace('Modules', '', $moduleName);
-        $moduleName = str_replace('Module', '', $moduleName);
-        $moduleName = trim($moduleName);
-
         $latestVer = 'unknown';
         $moduleUrl = '#';
         $userGuide = '';
         $module = $this->moduleHelper->searchByModule($apiName);
 
         if (!empty($module)) {
+            $moduleName = $module['product_name'];
             $latestVer = $this->moduleHelper->getLatestVersion($module);
             $moduleUrl = $this->moduleHelper->getModuleUrl($module);
             if (!empty($module['packages'])) {
@@ -178,6 +174,11 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
                 $userGuide = "<a href='$userGuide' target='_blank'>Link</a>";
             }
         }
+
+        $moduleName = str_replace('Bss', '', $moduleName);
+        $moduleName = str_replace('Modules', '', $moduleName);
+        $moduleName = str_replace('Module', '', $moduleName);
+        $moduleName = trim($moduleName);
 
         $latestVerCol = $latestVer == 'unknown' ? $latestVer : "<a href='$moduleUrl' target='_blank'>$latestVer</a>";
 
