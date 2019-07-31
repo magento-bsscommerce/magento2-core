@@ -15,6 +15,20 @@
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 
+.admin__menu .level-0.item-bss-core-menu > a {
+  span {
+    display: none;
+  }
+  &:before {
+    content: url('../images/bsscommerce-logo.png');
+    zoom: 0.5;
+  }
+}
+
+.admin__field-label {
+  cursor: default;
+}
+
 #bss-core-header {
   .logo {
     float: left;
@@ -63,10 +77,7 @@
     width: 50%;
   }
   .modal-title {
-    margin-left: 18%;
-  }
-  .modal-content {
-    padding: 0;
+    margin-left: 20%;
   }
   #bss-popup-new-version {
     width: 100%;
@@ -81,6 +92,7 @@
     .messages {
       width: 80%;
       float: right;
+      padding-left: 20px;
       li {
         margin-bottom: 10px;
         a {

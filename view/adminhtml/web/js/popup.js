@@ -38,15 +38,14 @@ define([
                     innerScroll: true,
                     title: $.mage.__(this.options.title),
                     modalClass: "bss-popup",
-                    autoOpen: true,
+                    autoOpen: false,
                     responsive: true,
-                    clickableOverlay: false,
+                    clickableOverlay: true,
                 };
 
             if (this._isCookieSet(cookie) != true) {
                 $widget._openModal(options, cookie);
             }
-
         },
 
         /**
@@ -59,12 +58,13 @@ define([
 
         _openModal: function (options, cookie) {
 
-            var html = this.element,
-                popup = modal(options, html);
+            var html = this.element;
+            modal(options, html);
 
-            setTimeout(html.modal('openModal'), this.options.delay);
+            setTimeout(function () {
+                html.modal('openModal')
+            }, this.options.delay);
 
-            html.modal('openModal');
             this._setCookie(cookie);
         },
 
