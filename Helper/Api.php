@@ -22,7 +22,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 class Api extends AbstractHelper
 {
-    const GRAPHQL_ENDPOINT = 'http://devdemo.bsscommerce.com/bsscommerce/graphql';
+    const GRAPHQL_ENDPOINT = 'http://127.0.0.1/bsscommercer2019/graphql';
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
@@ -51,21 +51,20 @@ class Api extends AbstractHelper
         try {
             $query =
                 'query {
-                     modules {
-                         items{
+                    modules {
+                        items {
                             name
                             product_name
+                            entity_id
+                            product_url
+                            user_guide
                             packages {
-                                entity_id
-                                product_url
-                                api_name
                                 title
-                                user_guide
                             }
-                         }
+                        }
                         count
-                     }
-	        }';
+                    }
+	            }';
             return $this->graphQlQuery($query)['data']['modules']['items'];
         } catch (\Exception $exception) {
             $this->_logger->critical($exception->getMessage());

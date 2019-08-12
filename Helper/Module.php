@@ -105,18 +105,28 @@ class Module
     /**
      * Get bsscommerce.com module url.
      *
-     * @param array $modules
+     * @param array $module
      * @return string
      */
-    public function getModuleUrl($modules)
+    public function getModuleUrl($module)
     {
-        $packages = $modules['packages'];
-        if (!isset($packages[0])) {
-            return '#';
-        }
+        return !empty($module['product_url']) ? $module['product_url'] : '#';
+    }
 
-        $packages = $packages[0];
-        return isset($packages['product_url']) ? $packages['product_url'] : '#';
+    /**
+     * Get Module User guide
+     *
+     * @param array $module
+     * @return string
+     */
+    public function getModuleUserGuide($module)
+    {
+        if (!empty($module['user_guide'])) {
+            $userGuide = $module['user_guide'];
+            $userGuide = "<a href='$userGuide' target='_blank'>" . __('Link') . "</a>";
+            return $userGuide;
+        }
+        return '';
     }
 
     /**
