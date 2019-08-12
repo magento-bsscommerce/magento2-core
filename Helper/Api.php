@@ -22,7 +22,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 class Api extends AbstractHelper
 {
-    const GRAPHQL_ENDPOINT = 'http://127.0.0.1/bsscommercer2019/graphql';
+    const GRAPHQL_ENDPOINT = 'https://bsscommerce.com/graphql';
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json

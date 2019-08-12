@@ -75,7 +75,6 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * @param AbstractElement $element
      * @return string
-     * @throws \ErrorException
      */
     public function render(AbstractElement $element)
     {

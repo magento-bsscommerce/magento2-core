@@ -142,10 +142,7 @@ class Module
         $packages = $module['packages'];
         if (count($packages) == 1) {
             $moduleInfo = $packages[0];
-            $linkTitle = explode(" ", $moduleInfo['title']);
-            $latestVer = ltrim($this->getLinkVersion($linkTitle), 'v');
-
-            return $latestVer;
+            return $this->matchVersion($moduleInfo['title']);
         }
 
         $latestVer = $this->getLatestByExactVersionEdition($packages);
@@ -166,12 +163,23 @@ class Module
 
         if ($onlyVersionNumber) {
             foreach ($latestVer as $key => $version) {
-                preg_match("/(?:v)((?:[0-9]+\.?)+)/i", $version, $matches);
-                $latestVer[$key] = $matches[1];
+                $latestVer[$key] = $this->matchVersion($version);
             }
         }
 
         return max($latestVer);
+    }
+
+    /**
+     * @param string $versionString
+     * @return string
+     */
+    protected function matchVersion($versionString)
+    {
+        preg_match("/(?:v)((?:[0-9]+\.?)+)/i", $versionString, $matches);
+        if (isset($matches[1]))
+            return $matches[1];
+        return '';
     }
 
     /**
