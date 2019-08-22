@@ -17,13 +17,13 @@
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <add id="Bss_Core::bss_core_menu"
-             title="BSS Commerce"
-             module="Bss_Core"
-             sortOrder="90"
-             action="adminhtml/system_config/edit/section/bss_core"
-             resource="Bss_Core::config" />
-    </menu>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Bss_Core::config" title="BSS Commerce Information" sortOrder="10"/>
+            </resource>
+        </resources>
+    </acl>
 </config>
