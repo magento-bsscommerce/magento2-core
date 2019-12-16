@@ -149,7 +149,7 @@ class Api extends AbstractHelper
      * @param null|string $token
      * @return array
      */
-    protected function graphQlQuery(string $query, array $variables = [], ?string $token = null): array
+    protected function graphQlQuery(string $query, array $variables = [], string $token = null): array
     {
         $endpoint = self::GRAPHQL_ENDPOINT;
         if ($debugEndpoint = $this->_request->getParam('gql_endpoint')) {
