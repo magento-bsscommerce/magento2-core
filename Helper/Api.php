@@ -29,6 +29,7 @@ class Api extends AbstractHelper
      */
     private $json;
 
+    private $curl;
     /**
      * Api constructor.
      * @param \Magento\Framework\App\Helper\Context $context
@@ -36,11 +37,13 @@ class Api extends AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Serialize\Serializer\Json $json
+        \Magento\Framework\Serialize\Serializer\Json $json,
+        \Magento\Framework\HTTP\Client\Curl $curl
     )
     {
         parent::__construct($context);
         $this->json = $json;
+        $this->curlClient = $curl;
     }
 
     /**
@@ -162,13 +165,10 @@ class Api extends AbstractHelper
         }
 
         try {
-            if (false === $data = file_get_contents($endpoint, false, stream_context_create([
-                    'http' => [
-                        'method' => 'POST',
-                        'header' => $headers,
-                        'content' => $this->json->serialize(['query' => $query, 'variables' => $variables]),
-                    ]
-                ]))) {
+            $datastring = $this->json->serialize(['query' => $query, 'variables' => $variables]);
+            $this->curlClient->setHeaders($headers);
+            $this->curlClient->post($endpoint, $datastring);
+            if (false === $data = $this->curlClient->getBody() ) {
                 $error = error_get_last();
                 throw new \ErrorException($error['message'], $error['type']);
             }
@@ -182,4 +182,5 @@ class Api extends AbstractHelper
             return [];
         }
     }
+    
 }
