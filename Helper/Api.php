@@ -29,7 +29,11 @@ class Api extends AbstractHelper
      */
     private $json;
 
-    private $curl;
+    /**
+     * @var \Magento\Framework\HTTP\Client\Curl
+     */
+    private $curlClient;
+    
     /**
      * Api constructor.
      * @param \Magento\Framework\App\Helper\Context $context
@@ -38,12 +42,12 @@ class Api extends AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Serialize\Serializer\Json $json,
-        \Magento\Framework\HTTP\Client\Curl $curl
+        \Magento\Framework\HTTP\Client\Curl $curlClient
     )
     {
         parent::__construct($context);
         $this->json = $json;
-        $this->curlClient = $curl;
+        $this->curlClient = $curlClient;
     }
 
     /**

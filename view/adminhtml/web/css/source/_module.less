@@ -16,17 +16,16 @@
  */
 
 .admin__menu .level-0.item-bss-core-menu > a {
+  &:before {
+    content: url('Bss_Core::images/logo-bss.svg');
     width: 40%;
     margin-left: auto;
     margin-bottom: 10px;
     margin-right: auto;
-
-  &:before {
-    content: "url('Bss_Core::images/logo-bss.svg');"
   }
   
   &:hover::before {
-    content: "url('Bss_Core::images/logo-bss-light.svg');"
+    content: url('Bss_Core::images/logo-bss-light.svg');
   }
 }
 
