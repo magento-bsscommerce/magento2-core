@@ -158,6 +158,10 @@ class Module
         }
 
         if (empty($latestVer)) {
+            if (is_array($packages) && isset($packages[0])) {
+                $moduleInfo = $packages[0];
+                return $this->matchVersion($moduleInfo['title']);
+            }
             return 'unknown';
         }
 
