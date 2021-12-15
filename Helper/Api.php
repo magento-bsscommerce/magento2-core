@@ -33,7 +33,7 @@ class Api extends AbstractHelper
      * @var \Magento\Framework\HTTP\Client\Curl
      */
     private $curlClient;
-    
+
     /**
      * Api constructor.
      * @param \Magento\Framework\App\Helper\Context $context
@@ -72,7 +72,7 @@ class Api extends AbstractHelper
                         count
                     }
 	            }';
-            return $this->graphQlQuery($query)['data']['modules']['items'];
+            return $this->graphQlQuery($query)['data']['modules']['items'] ?? [];
         } catch (\Exception $exception) {
             $this->_logger->critical($exception->getMessage());
             return [];
@@ -94,7 +94,7 @@ class Api extends AbstractHelper
                 theme_popup_block
             }
 	    }';
-            return $this->graphQlQuery($query)['data']['configs'];
+            return $this->graphQlQuery($query)['data']['configs'] ?? [];
         } catch (\Exception $exception) {
             $this->_logger->critical($exception->getMessage());
             return [];
@@ -116,7 +116,7 @@ class Api extends AbstractHelper
                 link
             }
 	    }';
-            return $this->graphQlQuery($query)['data']['new_products'];
+            return $this->graphQlQuery($query)['data']['new_products'] ?? [];
         } catch (\Exception $exception) {
             $this->_logger->critical($exception->getMessage());
             return [];
@@ -144,7 +144,7 @@ class Api extends AbstractHelper
                 }
             }
 	    }";
-            return $this->graphQlQuery($query)['data']['related_products'];
+            return $this->graphQlQuery($query)['data']['related_products'] ?? [];
         } catch (\Exception $exception) {
             return [];
         }
@@ -186,5 +186,5 @@ class Api extends AbstractHelper
             return [];
         }
     }
-    
+
 }
