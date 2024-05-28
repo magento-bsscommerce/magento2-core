@@ -1,0 +1,19 @@
+<div >
+    <label>abc</label>
+</div>
+<div id="bss-promotions-container" data-bind="foreach: $data.promotionsData">
+    <h2 class="bss-promotion-title" data-bind="text: title"></h2>
+    <h2 class="bss-promotion-description" data-bind="text: description"></h2>
+    <div class="bss-promotion-extensions" data-bind="foreach: modules">
+        <div class="bss-extension">
+            <h3 class="bss-extension-name" data-bind="text: name"></h3>
+            <div>
+                <img data-bind="attr: {src: image}" alt="Module Image">
+                <div class="bss-extension-price" data-bind="text: '$' + price"></div>
+            </div>
+<!--            <div class="reviews" data-bind="text: reviews + ' Review(s)'"></div>-->
+            <button>GRAB IT!</button>
+        </div>
+    </div>
+</div>
+

@@ -12,7 +12,7 @@
  * @category   BSS
  * @package    Bss_Core
  * @author     Extension Team
- * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2017-2024 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 
@@ -146,6 +146,38 @@ class Api extends AbstractHelper
 	    }";
             return $this->graphQlQuery($query)['data']['related_products'] ?? [];
         } catch (\Exception $exception) {
+            return [];
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getPromotions()
+    {
+        try {
+            $query = "query {
+    promotions {
+        description
+        title
+        modules {
+            image
+            link
+            name
+            price
+            sku
+            review_rate
+            review_details {
+                detail
+                rate
+                title
+            }
+        }
+    }
+}";
+            return $this->graphQlQuery($query)['data']['promotions'] ?? [];
+        } catch (\Exception $exception) {
+            $this->_logger->critical($exception->getMessage());
             return [];
         }
     }
