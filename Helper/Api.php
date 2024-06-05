@@ -22,7 +22,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 class Api extends AbstractHelper
 {
-    const GRAPHQL_ENDPOINT = 'https://bsscommerce.com/graphql';
+    const GRAPHQL_ENDPOINT = 'http://m246p2.namht/graphql';
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
@@ -43,8 +43,7 @@ class Api extends AbstractHelper
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Serialize\Serializer\Json $json,
         \Magento\Framework\HTTP\Client\Curl $curlClient
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->json = $json;
         $this->curlClient = $curlClient;
@@ -167,6 +166,7 @@ class Api extends AbstractHelper
             price
             sku
             review_rate
+            review_total
             review_details {
                 detail
                 rate
@@ -175,7 +175,7 @@ class Api extends AbstractHelper
         }
     }
 }";
-            return $this->graphQlQuery($query)['data']['promotions'] ?? [];
+            return $this->graphQlGetQuery($query)['data']['promotions'] ?? [];
         } catch (\Exception $exception) {
             $this->_logger->critical($exception->getMessage());
             return [];
@@ -204,6 +204,44 @@ class Api extends AbstractHelper
             $datastring = $this->json->serialize(['query' => $query, 'variables' => $variables]);
             $this->curlClient->setHeaders($headers);
             $this->curlClient->post($endpoint, $datastring);
+            if (false === $data = $this->curlClient->getBody() ) {
+                $error = error_get_last();
+                throw new \ErrorException($error['message'], $error['type']);
+            }
+
+            return $this->json->unserialize($data);
+        } catch (\ErrorException $exception) {
+            $this->_logger->critical($exception->getMessage());
+            return [];
+        } catch (\Exception $exception) {
+            $this->_logger->critical($exception->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Send graphql query method get
+     * @param string $query
+     * @param array $variables
+     * @param null|string $token
+     * @return array
+     */
+    protected function graphQlGetQuery(string $query, array $variables = [], string $token = null): array
+    {
+        $endpoint = self::GRAPHQL_ENDPOINT;
+        if ($debugEndpoint = $this->_request->getParam('gql_endpoint')) {
+            $endpoint = $debugEndpoint;
+        }
+
+        $headers = ['Content-Type' =>'application/json'];
+        if (null !== $token) {
+            $headers[] = "Authorization: bearer $token";
+        }
+
+        try {
+            $endpoint .= '?' . http_build_query(['query' => $query, 'variables' => $variables]);
+            $this->curlClient->setHeaders($headers);
+            $this->curlClient->get($endpoint);
             if (false === $data = $this->curlClient->getBody() ) {
                 $error = error_get_last();
                 throw new \ErrorException($error['message'], $error['type']);

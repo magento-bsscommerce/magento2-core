@@ -24,6 +24,7 @@ namespace Bss\Core\Block\Adminhtml;
 use Bss\Core\Helper\Api;
 use Magento\Backend\Block\Template;
 use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Serialize\Serializer\Json;
 
 class Extensions extends Field
@@ -52,6 +53,11 @@ class Extensions extends Field
         parent::__construct($context, $data);
         $this->serializer = $serializer;
         $this->apiHelper = $apiHelper;
+    }
+
+    protected function _getElementHtml(AbstractElement $element)
+    {
+        return $this->toHtml();
     }
 
     public function getPromotionsDataJson(): string

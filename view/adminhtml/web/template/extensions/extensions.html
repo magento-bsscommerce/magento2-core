@@ -5,7 +5,6 @@
     <div class="bss-promotions-container__content">
         <div class="bss-header-extension">
             <div class="bss-header-extension_icon">
-<!--                <img data-bind="attr: {src: $data.test()}" alt="My Image" />-->
                 <div class="bss-extension_icon-img"></div>
             </div>
             <div>
@@ -17,36 +16,23 @@
             <div class="bss-extension grid-item">
                 <div class="bss-extension-item__left">
                     <div class="bss-extension-item__img">
-                        <!--                    <img width="50px" height="50px" data-bind="attr: {src: image}" alt="Module Image">-->
-                        <img width="50px" height="50px" src="https://gcs.tripi.vn/public-tripi/tripi-feed/img/474078sZa/hinh-anh-dep-6_044127357.jpg" alt="Module Image">
+                        <img width="50px" height="50px" data-bind="attr: {src: image}" alt="Module Image">
                     </div>
                     <div class="bss-extension-price" data-bind="text: '$' + price"></div>
                 </div>
                 <div class="bss-extension-item__right">
                     <h3 class="bss-extension-name" data-bind="text: name"></h3>
                     <div class="bss-extension-review">
-                        <div class="stars-container">
-                            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M12 .587l3.668 7.568L24 9.432l-6 5.917 1.417 8.251L12 18.902 4.583 23.6 6 15.349 0 9.432l8.332-1.277z"/>
-                            </svg>
-                            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M12 .587l3.668 7.568L24 9.432l-6 5.917 1.417 8.251L12 18.902 4.583 23.6 6 15.349 0 9.432l8.332-1.277z"/>
-                            </svg>
-                            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M12 .587l3.668 7.568L24 9.432l-6 5.917 1.417 8.251L12 18.902 4.583 23.6 6 15.349 0 9.432l8.332-1.277z"/>
-                            </svg>
-                            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M12 .587l3.668 7.568L24 9.432l-6 5.917 1.417 8.251L12 18.902 4.583 23.6 6 15.349 0 9.432l8.332-1.277z"/>
-                            </svg>
-                            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M12 .587l3.668 7.568L24 9.432l-6 5.917 1.417 8.251L12 18.902 4.583 23.6 6 15.349 0 9.432l8.332-1.277z"/>
-                            </svg>
+                        <div class="bss-rating-summary">
+                            <div class="bss-rating-result" title="30%">
+                                <span data-bind="attr: {style: 'width: ' + review_rate + '%'}" >
+                                </span>
+                            </div>
                         </div>
-<!--                                            <div class="reviews" data-bind="text: reviews + ' Review(s)'"></div>-->
-                        <div class="reviews">45 Review(s)</div>
+                        <div class="reviews" data-bind="text: review_total + ' Review(s)'"></div>
                     </div>
-                    <a href="">
-                        <button type="submit" class="bss-extension-btn">GRAB IT!</button>
+                    <a data-bind="attr: {href: link}" target="_blank" rel="noopener noreferrer">
+                        <button type="button" class="bss-extension-btn">GRAB IT!</button>
                     </a>
                 </div>
             </div>
