@@ -161,17 +161,13 @@ class Api extends AbstractHelper
         title
         modules {
             image
-            link
+            url
             name
-            price
             sku
-            review_rate
-            review_total
-            review_details {
-                detail
-                rate
-                title
-            }
+            regular_price
+            final_price
+            review_count
+            rating_summary
         }
     }
 }";
