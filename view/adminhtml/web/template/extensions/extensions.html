@@ -19,7 +19,7 @@
 <div class="bss-title-extension">
     <label>Bss Promotion Extensions</label>
 </div>
-<div id="bss-promotions-container" data-bind="foreach: $data.promotionsData">
+<div id="bss-promotions-container" data-bind="foreach: $data.promotionsData, afterRender: setHeightScroll">
     <div class="bss-promotions-container__content">
         <div class="bss-header-extension">
             <div class="bss-header-extension_icon">
@@ -57,4 +57,26 @@
         </div>
     </div>
 </div>
+<style>
+    /* width */
+    #bss-promotions-container ::-webkit-scrollbar {
+        width: 8px;
+    }
 
+    /* Track */
+    #bss-promotions-container ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    #bss-promotions-container ::-webkit-scrollbar-thumb {
+        background: #fd9a00;
+        border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    #bss-promotions-container ::-webkit-scrollbar-thumb:hover {
+        background: #fd9a00;
+    }
+</style>
