@@ -19,7 +19,7 @@
 <div class="bss-title-extension">
     <label>Bss Promotion Extensions</label>
 </div>
-<div id="bss-promotions-container" data-bind="foreach: $data.promotionsData">
+<div id="bss-promotions-container" data-bind="foreach: $data.promotionsData, afterRender: setHeightScroll">
     <div class="bss-promotions-container__content">
         <div class="bss-header-extension">
             <div class="bss-header-extension_icon">
@@ -57,4 +57,3 @@
         </div>
     </div>
 </div>
-
