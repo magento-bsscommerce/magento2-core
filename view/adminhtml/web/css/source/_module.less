@@ -132,12 +132,12 @@
   display: flex;
   align-items: center;
   border-bottom: #e7e7e7 solid 1px;
-  padding: 32px;
+  padding: 8px;
 }
 .bss-header-extension .bss-header-extension_icon {
   width: 100px;
   height: 58px;
-  margin-right: 24px;
+  margin-right: 8px;
 }
 .bss-header-extension .bss-extension_icon-img {
   background-image: url('Bss_Core::images/bss.png');
@@ -152,15 +152,17 @@
   font-weight: 700;
   margin-bottom: 8px;
   font-size: 18px;
+  line-height: 18px;
 }
 .bss-header-extension .bss-promotion-description {
   font-size: 13px;
   font-weight: 600;
   color: #a3a3a3;
+  margin: 0;
 }
 //Content bss extensions
 .bss-promotion-extensions {
-  padding: 40px 32px 32px;
+  padding: 12px;
 }
 .bss-promotion-extensions .bss-extension {
   border: #e7e7e7 solid 1px;
@@ -170,8 +172,7 @@
 .bss-promotion-extensions.grid-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  overflow-y: auto;
+  gap: 12px;
 }
 .bss-promotion-extensions .grid-item {
   padding: 20px;
@@ -338,16 +339,18 @@
   background: #fd9a00;
 }
 
-@media (max-width: 1024px) {
-  .bss-promotion-extensions.grid-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+@media (max-width: 1600px) {
   .bss-promotion-extensions .bss-extension-review {
     flex-direction: column;
   }
   .bss-promotion-extensions .bss-extension-review .reviews {
     padding-left: 0;
     padding-top: 4px;
+  }
+}
+@media (max-width: 1024px) {
+  .bss-promotion-extensions.grid-container {
+    grid-template-columns: repeat(2, 1fr);
   }
   .bss-header-extension {
     padding: 10px;
