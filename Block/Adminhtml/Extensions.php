@@ -67,6 +67,30 @@ class Extensions extends Field
 
     private function getPromotionsData(): array
     {
-        return $this->apiHelper->getPromotions();
+        return $this->prepareDataPromotions($this->apiHelper->getPromotions());
+    }
+
+    /**
+     * Add utm code to url
+     *
+     * @param array $dataPromotions
+     * @return mixed
+     */
+    public function prepareDataPromotions($dataPromotions)
+    {
+        foreach ($dataPromotions as &$dataPromotion) {
+            foreach ($dataPromotion['modules'] as &$module) {
+                if ($module['url'] && filter_var($module['url'], FILTER_VALIDATE_URL)) {
+                    $currentUrl = parse_url($module['url']);
+                    if (isset($currentUrl['query']) && preg_match('~(utm_source|utm_medium)~', $currentUrl['query'])) {
+                        continue;
+                    }
+                    $paramsUtm = ['utm_source' => 'demostore', 'utm_medium' => 'referral'];
+                    $queryString = http_build_query($paramsUtm);
+                    $module['url'] = $module['url'] . '?' . $queryString;
+                }
+            }
+        }
+        return $dataPromotions;
     }
 }
