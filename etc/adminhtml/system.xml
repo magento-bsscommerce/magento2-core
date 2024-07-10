@@ -22,7 +22,19 @@
         <tab id="bss" translate="label" sortOrder="300">
             <label><![CDATA[Bss Commerce]]></label>
         </tab>
-        <section id="bss_core" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0"
+        <section id="bss_extensions" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0"
+                 showInStore="0">
+            <label><![CDATA[Bss Extensions]]></label>
+            <tab>bss</tab>
+            <resource>Bss_Core::config</resource>
+            <!--            <frontend_model>Bss\Core\Block\Adminhtml\Extensions</frontend_model>-->
+            <group id="extensions" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0"
+                   showInStore="0">
+                <label>Installed Extensions</label>
+                <frontend_model>Bss\Core\Block\Adminhtml\Extensions</frontend_model>
+            </group>
+        </section>
+            <section id="bss_core" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0"
                  showInStore="0">
             <label><![CDATA[Information]]></label>
             <tab>bss</tab>
@@ -59,18 +71,6 @@
                         <![CDATA[Choose 'Yes' if CSS not apply at frontend. Used for BSS Commerce's Modules]]>
                     </comment>
                 </field>
-            </group>
-        </section>
-        <section id="bss_extensions" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0"
-                 showInStore="0">
-            <label><![CDATA[Bss Extensions]]></label>
-            <tab>bss</tab>
-            <resource>Bss_Core::config</resource>
-<!--            <frontend_model>Bss\Core\Block\Adminhtml\Extensions</frontend_model>-->
-            <group id="extensions" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0"
-                   showInStore="0">
-                <label>Installed Extensions</label>
-                <frontend_model>Bss\Core\Block\Adminhtml\Extensions</frontend_model>
             </group>
         </section>
     </system>
