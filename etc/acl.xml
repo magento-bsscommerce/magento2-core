@@ -22,7 +22,13 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Bss_Core::config" title="BSS Commerce Information" sortOrder="10"/>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Bss_Core::config" title="Bss Core" sortOrder="0"/>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>
