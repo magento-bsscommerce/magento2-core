@@ -25,7 +25,8 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Bss_Core::config" title="Bss Core" sortOrder="0"/>
+                            <resource id="Bss_Core::extensions" title="Bss Extensions" sortOrder="0"/>
+                            <resource id="Bss_Core::config" title="Bss Information" sortOrder="0"/>
                         </resource>
                     </resource>
                 </resource>

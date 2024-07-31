@@ -26,7 +26,7 @@
                  showInStore="0">
             <label><![CDATA[Bss Extensions]]></label>
             <tab>bss</tab>
-            <resource>Bss_Core::config</resource>
+            <resource>Bss_Core::extensions</resource>
             <!--            <frontend_model>Bss\Core\Block\Adminhtml\Extensions</frontend_model>-->
             <group id="extensions" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0"
                    showInStore="0">
@@ -34,7 +34,7 @@
                 <frontend_model>Bss\Core\Block\Adminhtml\Extensions</frontend_model>
             </group>
         </section>
-            <section id="bss_core" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0"
+        <section id="bss_core" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0"
                  showInStore="0">
             <label><![CDATA[Information]]></label>
             <tab>bss</tab>
