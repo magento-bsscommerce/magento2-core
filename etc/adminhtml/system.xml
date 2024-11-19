@@ -20,14 +20,14 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="bss" translate="label" sortOrder="300">
-            <label><![CDATA[Bss Commerce]]></label>
+            <label><![CDATA[BSS Commerce]]></label>
         </tab>
         <section id="bss_extensions" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0"
                  showInStore="0">
-            <label><![CDATA[Bss Extensions]]></label>
+            <class>bss-tab-container</class>
+            <label><![CDATA[BSS Extensions]]></label>
             <tab>bss</tab>
             <resource>Bss_Core::extensions</resource>
-            <!--            <frontend_model>Bss\Core\Block\Adminhtml\Extensions</frontend_model>-->
             <group id="extensions" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0"
                    showInStore="0">
                 <label>Installed Extensions</label>
@@ -51,13 +51,6 @@
             </group>
             <group id="setting" translate="label" sortOrder="30" showInDefault="1">
                 <label>Configuration</label>
-                <field id="enable_popup" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enable BSS Commerce Popup</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>
-                        <![CDATA[Turn on BSS Commerce module's new version and promotion notifications]]>
-                    </comment>
-                </field>
                 <field id="additional_css" translate="label comment" type="textarea" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Additional CSS</label>
                     <comment>
