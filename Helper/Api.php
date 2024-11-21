@@ -23,6 +23,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 class Api extends AbstractHelper
 {
     const GRAPHQL_ENDPOINT = 'https://rds-promote-module.rdsm2.bsscommerce.com/graphql';
+    const GRAPHQL_ENDPOINT_BCSITE = 'https://bsscommerce.com/graphql';
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
@@ -71,7 +72,7 @@ class Api extends AbstractHelper
                         count
                     }
 	            }';
-            return $this->graphQlQuery($query)['data']['modules']['items'] ?? [];
+            return $this->graphQlQuery($query, self::GRAPHQL_ENDPOINT_BCSITE)['data']['modules']['items'] ?? [];
         } catch (\Exception $exception) {
             $this->_logger->critical($exception->getMessage());
             return [];
@@ -184,9 +185,8 @@ class Api extends AbstractHelper
      * @param null|string $token
      * @return array
      */
-    protected function graphQlQuery(string $query, array $variables = [], string $token = null): array
+    protected function graphQlQuery(string $query, string $endpoint = self::GRAPHQL_ENDPOINT, array $variables = [], string $token = null): array
     {
-        $endpoint = self::GRAPHQL_ENDPOINT;
         if ($debugEndpoint = $this->_request->getParam('gql_endpoint')) {
             $endpoint = $debugEndpoint;
         }

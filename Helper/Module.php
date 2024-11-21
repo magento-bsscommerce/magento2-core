@@ -61,9 +61,15 @@ class Module
     private $json;
 
     /**
+     * @var \Bss\Core\Model\ExtensionInfoRepository
+     */
+    private $extenstionRepository;
+
+    /**
      * Module constructor.
      * @param Data $bssHelper
      * @param Api $apiHelper
+     * @param \Bss\Core\Model\ExtensionInfoRepository $extenstionRepository
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\DataObjectFactory $dataObjectFactory
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
@@ -73,6 +79,7 @@ class Module
     public function __construct(
         Data $bssHelper,
         Api $apiHelper,
+        \Bss\Core\Model\ExtensionInfoRepository $extenstionRepository,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\DataObjectFactory $dataObjectFactory,
         \Magento\Framework\Module\Dir\Reader $moduleReader,
@@ -82,6 +89,7 @@ class Module
     {
         $this->bssHelper = $bssHelper;
         $this->apiHelper = $apiHelper;
+        $this->extenstionRepository = $extenstionRepository;
         $this->moduleList = $moduleList;
         $this->dataObjectFactory = $dataObjectFactory;
         $this->moduleReader = $moduleReader;
@@ -95,7 +103,7 @@ class Module
     public function getModules()
     {
         if (!$this->modules) {
-            $this->modules = $this->apiHelper->getModules();
+            $this->modules = $this->extenstionRepository->getExtensionInfo('version');
         }
         if (!is_array($this->modules))
             return [];

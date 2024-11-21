@@ -44,7 +44,10 @@ class Extensions extends Field
      */
     private $apiHelper;
 
+    private $extensionRepository;
+
     public function __construct(
+        \Bss\Core\Model\ExtensionInfoRepository $extensionRepository,
         Template\Context $context,
         Json $serializer,
         Api $apiHelper,
@@ -53,6 +56,7 @@ class Extensions extends Field
         parent::__construct($context, $data);
         $this->serializer = $serializer;
         $this->apiHelper = $apiHelper;
+        $this->extensionRepository = $extensionRepository;
     }
 
     protected function _getElementHtml(AbstractElement $element)
@@ -67,7 +71,7 @@ class Extensions extends Field
 
     private function getPromotionsData(): array
     {
-        return $this->prepareDataPromotions($this->apiHelper->getPromotions());
+        return $this->prepareDataPromotions($this->extensionRepository->getExtensionInfo('promotion'));
     }
 
     /**
