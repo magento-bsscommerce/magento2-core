@@ -22,7 +22,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 class Api extends AbstractHelper
 {
-    const GRAPHQL_ENDPOINT = 'https://rds-promote-module.rdsm2.bsscommerce.com/graphql';
+    const GRAPHQL_ENDPOINT = 'https://promotion.rdsm2.bsscommerce.com/graphql';
     const GRAPHQL_ENDPOINT_BCSITE = 'https://bsscommerce.com/graphql';
 
     /**

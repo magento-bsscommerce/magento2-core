@@ -103,22 +103,22 @@ class ExtensionInfoRepository implements ExtensionInfoRepositoryInterface
     public function getExtensionInfo($type)
     {
         $extensionInfoCollection = $this->extensionCollectionFactory->create();
-        $data = $extensionInfoCollection->addFieldToFilter('type', $type)->getFirstItem();
+        $extensionInfo = $extensionInfoCollection->addFieldToFilter('type', $type)->getFirstItem();
 
         $currentTimestamp = $this->dateTime->gmtTimestamp();
 
-        if ($data  && isset($data['last_updated'])) {
-            $lastUpdatedTimestamp = strtotime($data['last_updated'] ?? '');
+        if ($extensionInfo  && $extensionInfo->getLastUpdated()) {
+            $lastUpdatedTimestamp = strtotime($extensionInfo->getLastUpdated() ?? '');
 
             if (($currentTimestamp - $lastUpdatedTimestamp) < self::ONE_DAY) {
-                return $this->jsonHelper->jsonDecode($data['response_data']);
+                return $this->jsonHelper->jsonDecode($extensionInfo->getResponseData());
             }
         }
 
         try {
             $newData = $this->fetchDataFromApi($type);
         } catch (NoSuchEntityException $e) {
-            return $data ? $this->jsonHelper->jsonDecode($data['response_data']) : [];
+            return $extensionInfo ? $this->jsonHelper->jsonDecode($extensionInfo->getResponseData()) : [];
         }
 
         $this->saveDataToCache($newData, $type);
