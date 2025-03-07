@@ -199,6 +199,7 @@ class Api extends AbstractHelper
         try {
             $datastring = $this->json->serialize(['query' => $query, 'variables' => $variables]);
             $this->curlClient->setHeaders($headers);
+            $this->curlClient->setTimeout(10);
             $this->curlClient->post($endpoint, $datastring);
             if (false === $data = $this->curlClient->getBody() ) {
                 $error = error_get_last();
