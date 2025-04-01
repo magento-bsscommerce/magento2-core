@@ -51,7 +51,7 @@ class Extensions extends Field
         Template\Context $context,
         Json $serializer,
         Api $apiHelper,
-        array $data = [],
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->serializer = $serializer;
